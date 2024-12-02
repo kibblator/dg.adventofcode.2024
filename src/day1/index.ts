@@ -1,4 +1,4 @@
-const getArrays = (input) => {
+const getArrays = (input: string[]) => {
   let lhs = [];
   let rhs = [];
 
@@ -14,7 +14,7 @@ const getArrays = (input) => {
   return { lhs, rhs };
 };
 
-export const hysteria = (input) => {
+export const hysteria = (input: string[]) => {
   const { lhs, rhs } = getArrays(input);
 
   let result = 0;
@@ -27,7 +27,7 @@ export const hysteria = (input) => {
   return result;
 };
 
-export const hysteria_similarity = (input) => {
+export const hysteria_similarity = (input: string[]) => {
   const { lhs, rhs } = getArrays(input);
 
   let result = 0;

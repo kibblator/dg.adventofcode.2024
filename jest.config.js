@@ -1,8 +1,8 @@
-const config = {
-  testMatch: ["<rootDir>/__tests__/**"],
+/** @type {import('ts-jest').JestConfigWithTsJest} **/
+export default {
+  testEnvironment: "node",
   transform: {
-    "^.+\\.m?js$": "babel-jest",
+    "^.+.tsx?$": ["ts-jest", {}],
   },
+  testMatch: ["<rootDir>/__tests__/**"],
 };
-
-export default config;

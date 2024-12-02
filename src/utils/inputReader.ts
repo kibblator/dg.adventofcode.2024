@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import { join } from "path";
 
-export const getTextFileLines = (path) => {
+export const getTextFileLines = (path: string) => {
   const inputPath = join(__dirname, path);
   const input = readFileSync(inputPath, "utf-8");
 
