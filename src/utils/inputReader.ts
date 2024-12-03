@@ -1,10 +1,13 @@
 import { readFileSync } from "fs";
-import { join } from "path";
 
 export const getTextFileLines = (path: string) => {
-  const inputPath = join(path);
-  const input = readFileSync(inputPath, "utf-8");
+  const input = getEntireTextFile(path);
 
   const lines = input.trim().split("\n");
   return lines;
+};
+
+export const getEntireTextFile = (path: string) => {
+  const input = readFileSync(path, "utf-8");
+  return input;
 };
