@@ -17,4 +17,20 @@ describe("Day 5", () => {
 
     console.log(`Day 5 Part 1 is: ${result}`);
   });
+
+  test("Part 2 Sample", () => {
+    const input = getTextFileLines("./src/day5/sample_input.txt");
+
+    const result = print_queue(input, true);
+
+    expect(result).toEqual(123);
+  });
+
+  test("Part 2 Test Input", () => {
+    const input = getTextFileLines("./src/day5/test_input.txt");
+
+    const result = print_queue(input, true);
+
+    console.log(`Day 5 Part 2 is: ${result}`);
+  });
 });
