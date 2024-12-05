@@ -15,7 +15,7 @@ describe("Day 4", () => {
 
     const result = ceres(input, "XMAS");
 
-    console.log(`Day 3 Part 1 is: ${result}`);
+    console.log(`Day 4 Part 1 is: ${result}`);
   });
 
   test("Part 2 Sample", () => {
@@ -31,6 +31,6 @@ describe("Day 4", () => {
 
     const result = ceres2(input);
 
-    console.log(`Day 3 Part 2 is: ${result}`);
+    console.log(`Day 4 Part 2 is: ${result}`);
   });
 });
