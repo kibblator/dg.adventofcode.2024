@@ -1,10 +1,12 @@
-const getGuardStartPos = (grid: string[][]): { row: number; col: number } => {
+const getGuardStartPos = (
+  grid: string[][]
+): { row: number; col: number; guardFacing: string } => {
   const guardIdentifier = "^";
 
   const row = grid.findIndex((row) => row.includes(guardIdentifier));
   const col = grid[row].indexOf(guardIdentifier);
 
-  return { row, col };
+  return { row, col, guardFacing: "north" };
 };
 
 const guardIsWithinGrid = (
@@ -74,16 +76,17 @@ const moveGuard = (
   return { guardX, guardY, guardFacing };
 };
 
-const printGrid = (grid: string[][]) => {
-  for (var row of grid) {
-    console.log(JSON.stringify(row));
-  }
-};
-
-export const guard = (grid: string[][]) => {
-  let { row: guardY, col: guardX } = getGuardStartPos(grid);
-  let guardFacing = "north";
-
+export const guard = (
+  grid: string[][],
+  startLocation:
+    | { col: number; row: number; guardFacing: string }
+    | undefined = undefined
+) => {
+  let {
+    row: guardY,
+    col: guardX,
+    guardFacing,
+  } = startLocation || getGuardStartPos(grid);
   let visitedLocations = new Set<string>();
   let loop = false;
 
@@ -96,7 +99,6 @@ export const guard = (grid: string[][]) => {
     if (!hasVisited) {
       visitedLocations.add(`${guardY}|${guardX}|${guardFacing}`);
     } else {
-      console.log(`looping`);
       loop = true;
       break;
     }
@@ -112,13 +114,23 @@ export const guard = (grid: string[][]) => {
     guardFacing = face;
   }
 
-  const uniqueLocations = new Set(
-    Array.from(visitedLocations).map((value: string) => {
-      const [x, y] = value.split("|");
-      return `${x}|${y}`;
-    })
-  );
-  return { visitedLocations: uniqueLocations, loop };
+  const uniqueLocations = new Set<string>();
+  const seenLocations = new Set<string>();
+
+  for (const entry of visitedLocations) {
+    const [x, y] = entry.split("|");
+    const key = `${x}|${y}`;
+
+    if (!seenLocations.has(key)) {
+      seenLocations.add(key);
+      uniqueLocations.add(entry);
+    }
+  }
+
+  return {
+    visitedLocations: uniqueLocations,
+    loop,
+  };
 };
 
 export const guardObstacle = (grid: string[][]) => {
@@ -131,14 +143,18 @@ export const guardObstacle = (grid: string[][]) => {
   let loops = 0;
   let index = 0;
 
+  let startLocation;
   for (var location of visitedLocations) {
-    console.log(`Trying ${index + 1} of ${visitedLocations.size}`);
-
     const newGrid = structuredClone(grid);
-    const [y, x] = location.split("|");
+    const [y, x, facing] = location.split("|");
 
     newGrid[+y][+x] = "#";
-    const { loop } = guard(newGrid);
+    const { loop } = guard(newGrid, startLocation);
+    startLocation = {
+      col: +x,
+      row: +y,
+      guardFacing: facing,
+    };
 
     if (loop) {
       loops++;
