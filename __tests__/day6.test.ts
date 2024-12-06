@@ -7,7 +7,7 @@ describe("Day 6", () => {
 
     const { visitedLocations } = guard(input);
 
-    expect(visitedLocations.length).toEqual(41);
+    expect(visitedLocations.size).toEqual(41);
   });
 
   test("Part 1 Test Input", () => {
@@ -15,7 +15,7 @@ describe("Day 6", () => {
 
     const { visitedLocations } = guard(input);
 
-    console.log(`Day 6 Part 1 is: ${visitedLocations.length}`);
+    console.log(`Day 6 Part 1 is: ${visitedLocations.size}`);
   });
 
   test("Part 2 Sample", () => {

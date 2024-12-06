@@ -84,17 +84,17 @@ export const guard = (grid: string[][]) => {
   let { row: guardY, col: guardX } = getGuardStartPos(grid);
   let guardFacing = "north";
 
-  let visitedLocations = [];
+  let visitedLocations = new Set<string>();
   let loop = false;
 
   while (guardIsWithinGrid(guardX, guardY, grid)) {
     grid[guardY][guardX] = "X";
 
-    const lastVisitedIndex = visitedLocations.indexOf(
+    const hasVisited = visitedLocations.has(
       `${guardY}|${guardX}|${guardFacing}`
     );
-    if (lastVisitedIndex == -1) {
-      visitedLocations.push(`${guardY}|${guardX}|${guardFacing}`);
+    if (!hasVisited) {
+      visitedLocations.add(`${guardY}|${guardX}|${guardFacing}`);
     } else {
       console.log(`looping`);
       loop = true;
@@ -112,10 +112,11 @@ export const guard = (grid: string[][]) => {
     guardFacing = face;
   }
 
-  const uniqueLocations = Array.from(
-    new Set(
-      visitedLocations.map((item) => item.split("|").slice(0, 2).join("|"))
-    )
+  const uniqueLocations = new Set(
+    Array.from(visitedLocations).map((value: string) => {
+      const [x, y] = value.split("|");
+      return `${x}|${y}`;
+    })
   );
   return { visitedLocations: uniqueLocations, loop };
 };
@@ -124,15 +125,17 @@ export const guardObstacle = (grid: string[][]) => {
   const startGrid = structuredClone(grid);
   const { visitedLocations } = guard(startGrid);
 
-  visitedLocations.splice(0, 1);
+  const firstItem = visitedLocations.values().next().value!;
+  visitedLocations.delete(firstItem);
 
   let loops = 0;
+  let index = 0;
 
-  for (var i = 0; i < visitedLocations.length; i++) {
-    console.log(`Trying ${i + 1} of ${visitedLocations.length}`);
+  for (var location of visitedLocations) {
+    console.log(`Trying ${index + 1} of ${visitedLocations.size}`);
 
     const newGrid = structuredClone(grid);
-    const [y, x] = visitedLocations[i].split("|");
+    const [y, x] = location.split("|");
 
     newGrid[+y][+x] = "#";
     const { loop } = guard(newGrid);
@@ -140,6 +143,7 @@ export const guardObstacle = (grid: string[][]) => {
     if (loop) {
       loops++;
     }
+    index++;
   }
 
   return loops;
