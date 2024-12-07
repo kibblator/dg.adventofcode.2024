@@ -23,11 +23,7 @@ const guardIsWithinGrid = (
 };
 
 const getProposedMoveSafe = (y: number, x: number, grid: string[][]) => {
-  try {
-    return grid[y][x];
-  } catch {
-    return "";
-  }
+  return guardIsWithinGrid(x, y, grid) ? grid[y][x] : "";
 };
 
 const moveGuard = (
@@ -91,8 +87,6 @@ export const guard = (
   let loop = false;
 
   while (guardIsWithinGrid(guardX, guardY, grid)) {
-    grid[guardY][guardX] = "X";
-
     const hasVisited = visitedLocations.has(
       `${guardY}|${guardX}|${guardFacing}`
     );
@@ -134,14 +128,12 @@ export const guard = (
 };
 
 export const guardObstacle = (grid: string[][]) => {
-  const startGrid = structuredClone(grid);
-  const { visitedLocations } = guard(startGrid);
+  const { visitedLocations } = guard(grid);
 
   const firstItem = visitedLocations.values().next().value!;
   visitedLocations.delete(firstItem);
 
   let loops = 0;
-  let index = 0;
 
   let startLocation;
   for (var location of visitedLocations) {
@@ -149,7 +141,9 @@ export const guardObstacle = (grid: string[][]) => {
     const [y, x, facing] = location.split("|");
 
     newGrid[+y][+x] = "#";
+
     const { loop } = guard(newGrid, startLocation);
+
     startLocation = {
       col: +x,
       row: +y,
@@ -159,7 +153,6 @@ export const guardObstacle = (grid: string[][]) => {
     if (loop) {
       loops++;
     }
-    index++;
   }
 
   return loops;
