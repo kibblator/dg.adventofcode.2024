@@ -137,12 +137,13 @@ export const guardObstacle = (grid: string[][]) => {
 
   let startLocation;
   for (var location of visitedLocations) {
-    const newGrid = structuredClone(grid);
     const [y, x, facing] = location.split("|");
 
-    newGrid[+y][+x] = "#";
+    grid[+y][+x] = "#";
 
-    const { loop } = guard(newGrid, startLocation);
+    const { loop } = guard(grid, startLocation);
+
+    grid[+y][+x] = ".";
 
     startLocation = {
       col: +x,
