@@ -22,8 +22,11 @@ const guardIsWithinGrid = (
   );
 };
 
-const getProposedMoveSafe = (y: number, x: number, grid: string[][]) => {
-  return guardIsWithinGrid(x, y, grid) ? grid[y][x] : "";
+const getProposedMove = (y: number, x: number, grid: string[][]) => {
+  if (x >= 0 && x < grid[0].length && y >= 0 && y < grid.length) {
+    return grid[y][x];
+  }
+  return "";
 };
 
 const moveGuard = (
@@ -36,7 +39,7 @@ const moveGuard = (
 
   switch (guardFacing) {
     case "north":
-      proposedMove = getProposedMoveSafe(guardY - 1, guardX, grid);
+      proposedMove = getProposedMove(guardY - 1, guardX, grid);
       if (proposedMove === "#") {
         guardFacing = "east";
       } else {
@@ -44,7 +47,7 @@ const moveGuard = (
       }
       break;
     case "east":
-      proposedMove = getProposedMoveSafe(guardY, guardX + 1, grid);
+      proposedMove = getProposedMove(guardY, guardX + 1, grid);
       if (proposedMove === "#") {
         guardFacing = "south";
       } else {
@@ -52,7 +55,7 @@ const moveGuard = (
       }
       break;
     case "south":
-      proposedMove = getProposedMoveSafe(guardY + 1, guardX, grid);
+      proposedMove = getProposedMove(guardY + 1, guardX, grid);
       if (proposedMove === "#") {
         guardFacing = "west";
       } else {
@@ -60,7 +63,7 @@ const moveGuard = (
       }
       break;
     case "west":
-      proposedMove = getProposedMoveSafe(guardY, guardX - 1, grid);
+      proposedMove = getProposedMove(guardY, guardX - 1, grid);
       if (proposedMove === "#") {
         guardFacing = "north";
       } else {
@@ -87,11 +90,11 @@ export const guard = (
   let loop = false;
 
   while (guardIsWithinGrid(guardX, guardY, grid)) {
-    const hasVisited = visitedLocations.has(
-      `${guardY}|${guardX}|${guardFacing}`
-    );
+    const visitedKey = `${guardY}|${guardX}|${guardFacing}`;
+
+    const hasVisited = visitedLocations.has(visitedKey);
     if (!hasVisited) {
-      visitedLocations.add(`${guardY}|${guardX}|${guardFacing}`);
+      visitedLocations.add(visitedKey);
     } else {
       loop = true;
       break;
