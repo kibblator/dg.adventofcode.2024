@@ -40,7 +40,6 @@ const rearrangeFileSystem = (currentFileSystemArray: string[]) => {
       currentFileSystemArray[index] = temp;
     }
     if (endsInAllDots(currentFileSystemArray)) {
-      console.log("Ends in all dots");
       return currentFileSystemArray;
     }
   }
@@ -111,16 +110,12 @@ const getChecksum = (fileSystem: string[]) => {
 export const defrag = (input: string, part2enabled: boolean = false) => {
   const fileSystem = getCurrentFileSystem(input, part2enabled);
 
-  console.log(`Current file system is ${fileSystem}`);
-
   let rearrangedFileSystem;
   if (part2enabled) {
     rearrangedFileSystem = rearrangeFileSystem2(fileSystem);
   } else {
     rearrangedFileSystem = rearrangeFileSystem(fileSystem);
   }
-
-  console.log(`Rearranged file system is ${rearrangedFileSystem}`);
 
   const checkSum = getChecksum(rearrangedFileSystem);
 

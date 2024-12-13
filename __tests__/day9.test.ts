@@ -34,15 +34,7 @@ describe("Day 9", () => {
     expect(result).toEqual(2858);
   });
 
-  test("Part 2 Sample", () => {
-    const input = getEntireTextFile("./src/day9/sample_input_2.txt");
-
-    const result = defrag(input, true);
-
-    expect(result).toEqual(2858);
-  });
-
-  test.only("Part 2 Test Input", () => {
+  test("Part 2 Test Input", () => {
     const input = getEntireTextFile("./src/day9/test_input.txt");
 
     const result = defrag(input, true);
